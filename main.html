@@ -1,16 +1,133 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Bar</title>
+    <style>
+        body{
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+            margin:0px;
+            padding:0px;
+        }
+        .circle{
+            display:flex;
+            justify-content: center;
+            align-items:center;
+            height:200px;
+            width:200px;
+            border-radius: 50%;
+            border:2px solid black;
+            z-index:2;
+            background-color: white;
+            font-size: xx-large;
+            transition: background-color 0.5s ease 0.5s;
+        }
+        .circles-container{
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+            width:100%;
+        }
+        .container{
+            position:relative;
+            width:80%;
+        }
+        .progress-line{
+            height:4px;
+            width:100%;
+            background-color: black;
+            position:absolute;
+            top:50%;
+            z-index:1;
+        }
+        .active{
+            background-color: green;
+            border-color: lightgreen;
+        }
+        .buttons-container{
+            margin-top:100px; 
+        }
+        .btn{
+            width:150px;
+            height:40px;
+            border-radius: 5px;
+            font-size: x-large;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        .progress-line-bar{
+            height:4px;
+            width:0%;
+            background-color: green;
+            transition:width 0.5s ease;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+    <div class="container">
+        <div class="progress-line">
+            <div class="progress-line-bar"></div>
+        </div>
+        <div class="circles-container"> 
+            <div class="circle active" id="circle-1">1</div>
+            <div class="circle" id="circle-2">2</div>
+            <div class="circle" id="circle-3">3</div>
+            <div class="circle" id="circle-4">4</div>
+            <div class="circle" id="circle-5">5</div>
+        </div>
+    </div>
+    <div class="buttons-container">
+        <button type="button" class="btn" disabled id="prev">Previous</button>
+        <button type="button" class="btn" id="next">Next</button>
+    </div>
+    <script>
+        const previousBtn=document.getElementById("prev");
+        const nextButton=document.getElementById("next");
+        const progressLineBar=document.querySelector(".progress-line-bar")
+        let activeCircles=1;
+        previousBtn.addEventListener("click",previousProgress);
+        nextButton.addEventListener("click",nextProgress);
 
+
+        function nextProgress(){
+            activeCircles++
+            console.log(activeCircles)
+            if(activeCircles)
+            previousBtn.removeAttribute("disabled")
+            let currentWidth=progressLineBar.style.width || "0%";
+            const replaceLastCharacter=currentWidth.replace(/%+$/,"");
+            const width=parseInt(replaceLastCharacter)+25;
+            progressLineBar.style.width=width+"%";
+            const circle=document.getElementById(`circle-${activeCircles}`);
+            circle.classList.add("active");
+            if(width==100){
+                nextButton.disabled="true";
+            }
+
+        }
+
+
+        function previousProgress(){
+
+            nextButton.removeAttribute("disabled");
+
+            if(activeCircles==2){
+                previousBtn.disabled="true";
+            }
+
+            let currentWidth=progressLineBar.style.width || "0%";
+            const width=parseInt(currentWidth.replace(/%+$/,""))-25;
+            progressLineBar.style.width=width+"%";
+            const circle=document.getElementById(`circle-${activeCircles}`);
+            circle.classList.remove("active");
+
+            activeCircles--
+        }
+    </script>
 </body>
-
 </html>
